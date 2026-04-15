@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>张睿 · AI产品经理</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:   #0a0f1e;
+      --navy2:  #0d1530;
+      --blue:   #1a2a5e;
+      --accent: #3b82f6;
+      --accent2:#60a5fa;
+      --glow:   rgba(59,130,246,0.15);
+      --text:   #e2e8f0;
+      --muted:  #94a3b8;
+      --card:   rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--navy); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+    /* ── Nav ── */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: background .3s, backdrop-filter .3s, box-shadow .3s;
+    }
+    #navbar.scrolled {
+      background: rgba(10,15,30,0.92);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 2rem;
+    }
+    .nav-logo { font-size: 1.1rem; font-weight: 700; letter-spacing: .05em; color: #fff; }
+    .nav-logo span { color: var(--accent2); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: .85rem; font-weight: 500; color: var(--muted);
+      text-decoration: none; letter-spacing: .04em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: .3s; }
+    #mobile-menu {
+      display: none; flex-direction: column; gap: 0;
+      background: rgba(10,15,30,0.97); padding: 1rem 2rem 1.5rem;
+    }
+    #mobile-menu a {
+      padding: .7rem 0; font-size: .95rem; color: var(--muted);
+      text-decoration: none; border-bottom: 1px solid var(--border);
+    }
+    #mobile-menu a:hover { color: #fff; }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,.18) 0%, transparent 70%),
+                  linear-gradient(160deg, #0a0f1e 0%, #0d1530 50%, #0a0f1e 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; opacity: .07;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px),
+                        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
+    }
+    .orb1 { width: 500px; height: 500px; background: rgba(59,130,246,.12); top: -100px; right: -100px; }
+    .orb2 { width: 300px; height: 300px; background: rgba(96,165,250,.08); bottom: 50px; left: -50px; }
+    .hero-content { position: relative; z-index: 2; text-align: center; padding: 2rem; max-width: 800px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(59,130,246,.12); border: 1px solid rgba(59,130,246,.3);
+      border-radius: 100px; padding: .35rem 1rem; font-size: .78rem;
+      color: var(--accent2); letter-spacing: .06em; margin-bottom: 2rem;
+    }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+    .hero-name {
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 700; letter-spacing: -.02em; line-height: 1.1;
+      background: linear-gradient(135deg, #fff 30%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: .5rem;
+    }
+    .hero-title {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--accent2); font-weight: 500; letter-spacing: .1em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-desc {
+      font-size: clamp(.95rem, 1.8vw, 1.1rem);
+      color: var(--muted); max-width: 560px; margin: 0 auto 2.5rem;
+      line-height: 1.8;
+    }
+    .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      padding: .8rem 2rem; border-radius: 8px; font-size: .9rem; font-weight: 600;
+      background: var(--accent); color: #fff; border: none; cursor: pointer;
+      text-decoration: none; transition: all .2s;
+      box-shadow: 0 0 24px rgba(59,130,246,.35);
+    }
+    .btn-primary:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 0 32px rgba(59,130,246,.5); }
+    .btn-outline {
+      padding: .8rem 2rem; border-radius: 8px; font-size: .9rem; font-weight: 600;
+      background: transparent; color: var(--text); border: 1px solid var(--border);
+      cursor: pointer; text-decoration: none; transition: all .2s;
+    }
+    .btn-outline:hover { border-color: var(--accent2); color: var(--accent2); transform: translateY(-2px); }
+    .hero-stats {
+      display: flex; gap: 3rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border);
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 700; color: #fff; line-height: 1; }
+    .stat-num span { color: var(--accent2); }
+    .stat-label { font-size: .78rem; color: var(--muted); margin-top: .3rem; letter-spacing: .04em; }
+
+    /* ── Section base ── */
+    section { padding: 6rem 2rem; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block; font-size: .72rem; font-weight: 600;
+      color: var(--accent2); letter-spacing: .12em; text-transform: uppercase;
+      margin-bottom: .8rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700;
+      color: #fff; line-height: 1.2; margin-bottom: 1rem;
+    }
+    .section-sub { font-size: 1rem; color: var(--muted); max-width: 560px; line-height: 1.8; }
+    .divider { width: 48px; height: 3px; background: var(--accent); border-radius: 2px; margin: 1.2rem 0 3rem; }
+
+    /* ── About ── */
+    #about { background: var(--navy2); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .about-tags { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.5rem; }
+    .tag {
+      padding: .35rem .9rem; border-radius: 100px; font-size: .78rem; font-weight: 500;
+      background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.25); color: var(--accent2);
+    }
+    .about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .about-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 1.4rem; transition: border-color .2s, transform .2s;
+    }
+    .about-card:hover { border-color: rgba(59,130,246,.4); transform: translateY(-3px); }
+    .about-card-num { font-size: 1.8rem; font-weight: 700; color: var(--accent2); line-height: 1; }
+    .about-card-label { font-size: .8rem; color: var(--muted); margin-top: .3rem; }
+
+    /* ── Capabilities ── */
+    .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+    .cap-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 2rem; transition: all .25s; position: relative; overflow: hidden;
+    }
+    .cap-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0; transition: opacity .3s;
+    }
+    .cap-card:hover { border-color: rgba(59,130,246,.4); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,.3); }
+    .cap-card:hover::before { opacity: 1; }
+    .cap-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .cap-title { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: .6rem; }
+    .cap-desc { font-size: .85rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── Experience ── */
+    #experience { background: var(--navy2); }
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 1px; background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+    .timeline-item { position: relative; margin-bottom: 3rem; }
+    .timeline-dot {
+      position: absolute; left: -2.4rem; top: .3rem;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 12px var(--accent);
+    }
+    .exp-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 1.8rem; transition: border-color .2s;
+    }
+    .exp-card:hover { border-color: rgba(59,130,246,.35); }
+    .exp-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: .5rem; margin-bottom: .8rem; }
+    .exp-company { font-size: 1.05rem; font-weight: 700; color: #fff; }
+    .exp-role { font-size: .85rem; color: var(--accent2); font-weight: 500; margin-top: .2rem; }
+    .exp-period { font-size: .78rem; color: var(--muted); background: rgba(255,255,255,.05); padding: .25rem .7rem; border-radius: 100px; white-space: nowrap; }
+    .exp-desc { font-size: .88rem; color: var(--muted); line-height: 1.8; }
+    .exp-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+    .exp-tag { font-size: .72rem; padding: .2rem .6rem; border-radius: 4px; background: rgba(59,130,246,.1); color: var(--accent2); }
+
+    /* ── Projects ── */
+    .proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+    .proj-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 1.8rem; transition: all .25s; display: flex; flex-direction: column;
+    }
+    .proj-card:hover { border-color: rgba(59,130,246,.4); transform: translateY(-4px); box-shadow: 0 24px 48px rgba(0,0,0,.35); }
+    .proj-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+    .proj-icon { font-size: 1.8rem; }
+    .proj-badge { font-size: .7rem; padding: .25rem .7rem; border-radius: 100px; background: rgba(59,130,246,.15); color: var(--accent2); border: 1px solid rgba(59,130,246,.25); }
+    .proj-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: .5rem; }
+    .proj-desc { font-size: .85rem; color: var(--muted); line-height: 1.7; flex: 1; }
+    .proj-metrics { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.2rem; }
+    .metric {
+      font-size: .75rem; padding: .3rem .7rem; border-radius: 6px;
+      background: rgba(16,185,129,.1); color: #34d399; border: 1px solid rgba(16,185,129,.2);
+      font-weight: 600;
+    }
+
+    /* ── Blog ── */
+    #blog { background: var(--navy2); }
+    .blog-controls { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .filter-btn {
+      padding: .4rem 1rem; border-radius: 100px; font-size: .8rem; font-weight: 500;
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      cursor: pointer; transition: all .2s;
+    }
+    .filter-btn.active, .filter-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+    .blog-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 1.6rem; cursor: pointer; transition: all .25s; display: flex; flex-direction: column;
+    }
+    .blog-card:hover { border-color: rgba(59,130,246,.4); transform: translateY(-3px); box-shadow: 0 16px 32px rgba(0,0,0,.3); }
+    .blog-meta { display: flex; align-items: center; gap: .8rem; margin-bottom: .8rem; flex-wrap: wrap; }
+    .blog-cat { font-size: .7rem; padding: .2rem .6rem; border-radius: 4px; background: rgba(59,130,246,.15); color: var(--accent2); font-weight: 600; }
+    .blog-date { font-size: .75rem; color: var(--muted); }
+    .blog-title { font-size: 1rem; font-weight: 600; color: #fff; line-height: 1.5; margin-bottom: .6rem; }
+    .blog-excerpt { font-size: .83rem; color: var(--muted); line-height: 1.7; flex: 1; }
+    .blog-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+    .blog-tag { font-size: .7rem; padding: .15rem .5rem; border-radius: 4px; background: rgba(255,255,255,.05); color: var(--muted); }
+    .blog-read { font-size: .78rem; color: var(--accent2); margin-top: 1rem; font-weight: 500; }
+
+    /* ── Modal ── */
+    #modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,.75); backdrop-filter: blur(8px);
+      align-items: flex-start; justify-content: center; padding: 2rem 1rem; overflow-y: auto;
+    }
+    #modal-overlay.open { display: flex; }
+    #modal-box {
+      background: #0d1530; border: 1px solid var(--border); border-radius: 20px;
+      max-width: 760px; width: 100%; padding: 2.5rem; position: relative;
+      margin: auto;
+    }
+    #modal-close {
+      position: absolute; top: 1.2rem; right: 1.2rem;
+      background: rgba(255,255,255,.08); border: none; color: var(--muted);
+      width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center; transition: background .2s;
+    }
+    #modal-close:hover { background: rgba(255,255,255,.15); color: #fff; }
+    #modal-cat { font-size: .75rem; color: var(--accent2); font-weight: 600; letter-spacing: .06em; margin-bottom: .6rem; }
+    #modal-title { font-size: 1.5rem; font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: .6rem; }
+    #modal-info { font-size: .8rem; color: var(--muted); margin-bottom: 1.5rem; }
+    #modal-body { font-size: .92rem; color: #cbd5e1; line-height: 1.9; }
+    #modal-body h2 { font-size: 1.15rem; font-weight: 600; color: #fff; margin: 1.8rem 0 .6rem; }
+    #modal-body h3 { font-size: 1rem; font-weight: 600; color: var(--accent2); margin: 1.4rem 0 .5rem; }
+    #modal-body p { margin-bottom: 1rem; }
+    #modal-body ul, #modal-body ol { padding-left: 1.4rem; margin-bottom: 1rem; }
+    #modal-body li { margin-bottom: .4rem; }
+    #modal-body blockquote {
+      border-left: 3px solid var(--accent); padding-left: 1rem; margin: 1rem 0;
+      color: var(--muted); font-style: italic;
+    }
+    #modal-body strong { color: #fff; }
+    #modal-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+
+    /* ── Skills ── */
+    .skills-cloud { display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; }
+    .skill-pill {
+      padding: .5rem 1.2rem; border-radius: 100px; font-size: .85rem; font-weight: 500;
+      border: 1px solid; transition: all .2s; cursor: default;
+    }
+    .skill-pill:hover { transform: translateY(-2px); }
+    .skill-l1 { background: rgba(59,130,246,.15); border-color: rgba(59,130,246,.4); color: var(--accent2); }
+    .skill-l2 { background: rgba(139,92,246,.1); border-color: rgba(139,92,246,.3); color: #a78bfa; }
+    .skill-l3 { background: rgba(16,185,129,.1); border-color: rgba(16,185,129,.3); color: #34d399; }
+    .skill-l4 { background: rgba(245,158,11,.1); border-color: rgba(245,158,11,.3); color: #fbbf24; }
+
+    /* ── Contact ── */
+    #contact { background: var(--navy2); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .contact-item {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 1.2rem 1.5rem; margin-bottom: 1rem; cursor: pointer; transition: all .2s;
+    }
+    .contact-item:hover { border-color: rgba(59,130,246,.4); transform: translateX(4px); }
+    .contact-icon { font-size: 1.4rem; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(59,130,246,.1); border-radius: 10px; }
+    .contact-label { font-size: .75rem; color: var(--muted); }
+    .contact-value { font-size: .95rem; color: #fff; font-weight: 500; }
+    .copy-hint { font-size: .7rem; color: var(--accent2); margin-top: .1rem; }
+    .contact-note { font-size: .88rem; color: var(--muted); line-height: 1.8; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center; padding: 2.5rem 2rem;
+      border-top: 1px solid var(--border); font-size: .8rem; color: var(--muted);
+    }
+
+    /* ── Animations ── */
+    .fade-up { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-cards { grid-template-columns: 1fr 1fr; }
+      section { padding: 4rem 1.2rem; }
+      .hero-stats { gap: 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      .about-cards { grid-template-columns: 1fr; }
+      .proj-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">张睿 <span>·</span> AI PM</div>
+    <ul class="nav-links">
+      <li><a href="#hero">首页</a></li>
+      <li><a href="#about">关于我</a></li>
+      <li><a href="#capabilities">核心能力</a></li>
+      <li><a href="#experience">工作经历</a></li>
+      <li><a href="#projects">标杆项目</a></li>
+      <li><a href="#blog">知识感悟</a></li>
+      <li><a href="#contact">联系我</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+  <div id="mobile-menu">
+    <a href="#hero" onclick="closeMenu()">首页</a>
+    <a href="#about" onclick="closeMenu()">关于我</a>
+    <a href="#capabilities" onclick="closeMenu()">核心能力</a>
+    <a href="#experience" onclick="closeMenu()">工作经历</a>
+    <a href="#projects" onclick="closeMenu()">标杆项目</a>
+    <a href="#blog" onclick="closeMenu()">知识感悟</a>
+    <a href="#contact" onclick="closeMenu()">联系我</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">AI 产品经理 · 杭州</div>
+    <h1 class="hero-name">张 睿</h1>
+    <div class="hero-title">AI Product Manager</div>
+    <p class="hero-desc">
+      12年产品经验，深耕AI大模型、政企数字化与智慧社区领域<br/>
+      用产品思维驱动业务增长，让AI真正落地创造价值
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">查看标杆项目</a>
+      <a href="#contact" class="btn-outline">立即联系</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">12<span>年</span></div>
+        <div class="stat-label">产品经验</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">400<span>万+</span></div>
+        <div class="stat-label">服务用户</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">120<span>亿</span></div>
+        <div class="stat-label">年流水规模</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">6<span>+</span></div>
+        <div class="stat-label">标杆项目</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════════ -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid fade-up">
+      <div>
+        <span class="section-tag">About Me</span>
+        <h2 class="section-title">关于我</h2>
+        <div class="divider"></div>
+        <p style="color:var(--muted);font-size:.95rem;line-height:1.9;margin-bottom:1rem;">
+          12年互联网产品经验，横跨 <strong style="color:#fff">AI大模型应用、政企数字化、智慧社区、物业科技</strong> 等核心赛道。曾主导多个亿级用户规模系统从0到1落地，具备完整的产品全链路能力。
+        </p>
+        <p style="color:var(--muted);font-size:.95rem;line-height:1.9;margin-bottom:1rem;">
+          深度理解 ToB 业务逻辑，擅长将 AI 技术转化为可落地的商业产品，在大模型、多模态、智能客服、态势感知等方向有丰富的实战经验。
+        </p>
+        <p style="color:var(--muted);font-size:.95rem;line-height:1.9;">
+          具备产品 + 设计复合背景，能独立完成从用户研究、需求分析、原型设计到上线运营的全流程工作。
+        </p>
+        <div class="about-tags">
+          <span class="tag">AI产品经理</span>
+          <span class="tag">大模型应用</span>
+          <span class="tag">政企数字化</span>
+          <span class="tag">智慧社区</span>
+          <span class="tag">物业科技</span>
+          <span class="tag">ToB产品</span>
+          <span class="tag">多模态AI</span>
+        </div>
+      </div>
+      <div class="about-cards">
+        <div class="about-card"><div class="about-card-num">12</div><div class="about-card-label">年产品经验</div></div>
+        <div class="about-card"><div class="about-card-num">400万+</div><div class="about-card-label">服务业主用户</div></div>
+        <div class="about-card"><div class="about-card-num">120亿</div><div class="about-card-label">年流水规模</div></div>
+        <div class="about-card"><div class="about-card-num">96%</div><div class="about-card-label">系统渗透率</div></div>
+        <div class="about-card"><div class="about-card-num">620万</div><div class="about-card-label">AI年节省成本</div></div>
+        <div class="about-card"><div class="about-card-num">94%</div><div class="about-card-label">AI意图识别率</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CAPABILITIES
+═══════════════════════════════════════════ -->
+<section id="capabilities">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center;margin-bottom:3rem;">
+      <span class="section-tag">Core Capabilities</span>
+      <h2 class="section-title">核心能力</h2>
+      <div class="divider" style="margin:1rem auto 0;"></div>
+    </div>
+    <div class="cap-grid fade-up">
+      <div class="cap-card">
+        <div class="cap-icon">🤖</div>
+        <div class="cap-title">全链路AI产品设计</div>
+        <div class="cap-desc">从大模型选型、Prompt工程、RAG架构到多模态交互，具备完整AI产品设计与落地能力，主导过多个AI应用从0到1上线。</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🎨</div>
+        <div class="cap-title">产品+设计复合思维</div>
+        <div class="cap-desc">兼具产品经理与UI/UX设计师背景，能独立完成原型设计、交互规范制定，大幅缩短产研协作周期，提升产品质量。</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🏗️</div>
+        <div class="cap-title">大规模系统落地</div>
+        <div class="cap-desc">主导过覆盖10城300+项目、400万用户的物业收费系统，具备复杂ToB系统的需求拆解、多方协调与规模化推广经验。</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🌐</div>
+        <div class="cap-title">多模态AI应用</div>
+        <div class="cap-desc">深度参与图像识别、语音交互、NLP等多模态AI产品研发，在智慧社区、电商选品、政务服务等场景有丰富落地经验。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     EXPERIENCE
+═══════════════════════════════════════════ -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="fade-up" style="margin-bottom:3rem;">
+      <span class="section-tag">Work Experience</span>
+      <h2 class="section-title">工作经历</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="timeline fade-up">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div><div class="exp-company">杭州观山海科技（AI电商）</div><div class="exp-role">AI产品经理</div></div>
+            <div class="exp-period">2023.06 — 至今</div>
+          </div>
+          <div class="exp-desc">主导观山海AI选品平台从0到1落地，构建基于大模型的智能选品、竞品分析、趋势预测体系。推动AI能力与电商业务深度融合，实现选品成功率85%、成本降低70%的核心业绩。</div>
+          <div class="exp-tags"><span class="exp-tag">大模型应用</span><span class="exp-tag">AI选品</span><span class="exp-tag">电商科技</span><span class="exp-tag">多模态</span></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div><div class="exp-company">中铁建物业（央企物业科技）</div><div class="exp-role">高级产品经理</div></div>
+            <div class="exp-period">2020.03 — 2023.05</div>
+          </div>
+          <div class="exp-desc">主导物业收费系统全国化落地，覆盖10城300+项目、400万业主，年流水120亿，渗透率96%。同期主导绿城AI客服管家项目，年节省成本620万，工单闭环率78%，意图识别准确率94%。</div>
+          <div class="exp-tags"><span class="exp-tag">物业科技</span><span class="exp-tag">AI客服</span><span class="exp-tag">大规模系统</span><span class="exp-tag">ToB产品</span></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div><div class="exp-company">杭州某政务科技公司</div><div class="exp-role">产品经理</div></div>
+            <div class="exp-period">2017.06 — 2020.02</div>
+          </div>
+          <div class="exp-desc">主导公安态势感知平台建设，重大警情下降30%；参与未来社区项目，入选住建部示范案例；主导龙游通政务APP，全省TOP3，用户满意度92.4分。</div>
+          <div class="exp-tags"><span class="exp-tag">政务数字化</span><span class="exp-tag">态势感知</span><span class="exp-tag">智慧社区</span><span class="exp-tag">政企解决方案</span></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div><div class="exp-company">早期互联网公司</div><div class="exp-role">产品经理 / UI设计师</div></div>
+            <div class="exp-period">2013.07 — 2017.05</div>
+          </div>
+          <div class="exp-desc">积累产品设计与用户研究基础能力，形成产品+设计复合背景，参与多个移动端产品从0到1的完整研发周期。</div>
+          <div class="exp-tags"><span class="exp-tag">移动产品</span><span class="exp-tag">UI设计</span><span class="exp-tag">用户研究</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PROJECTS
+═══════════════════════════════════════════ -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center;margin-bottom:3rem;">
+      <span class="section-tag">Flagship Projects</span>
+      <h2 class="section-title">标杆项目</h2>
+      <div class="divider" style="margin:1rem auto 0;"></div>
+    </div>
+    <div class="proj-grid fade-up">
+      <div class="proj-card">
+        <div class="proj-header"><div class="proj-icon">🛒</div><span class="proj-badge">AI电商</span></div>
+        <div class="proj-title">观山海 AI 智能选品平台</div>
+        <div class="proj-desc">基于大模型构建的电商智能选品系统，整合多模态商品分析、竞品监控、趋势预测能力，实现从人工选品到AI辅助决策的全面升级，大幅提升选品效率与成功率。</div>
+        <div class="proj-metrics"><span class="metric">选品成功率 85%</span><span class="metric">成本降低 70%</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-header"><div class="proj-icon">🏢</div><span class="proj-badge">物业科技</span></div>
+        <div class="proj-title">中铁建物业收费系统</div>
+        <div class="proj-desc">全国化物业收费与管理平台，覆盖10城300+项目，服务400万业主，实现线上缴费、账单管理、催缴自动化等核心功能，成为央企物业数字化标杆。</div>
+        <div class="proj-metrics"><span class="metric">400万业主</span><span class="metric">年流水 120亿</span><span class="metric">渗透率 96%</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-header"><div class="proj-icon">🤖</div><span class="proj-badge">AI客服</span></div>
+        <div class="proj-title">绿城 AI 客服管家</div>
+        <div class="proj-desc">基于NLP与大模型的智能客服系统，覆盖报修、投诉、咨询等全场景，实现意图识别、自动工单分发、闭环跟踪，大幅降低人工客服成本。</div>
+        <div class="proj-metrics"><span class="metric">年省 620万</span><span class="metric">工单闭环 78%</span><span class="metric">意图识别 94%</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-header"><div class="proj-icon">🔍</div><span class="proj-badge">公共安全</span></div>
+        <div class="proj-title">公安态势感知平台</div>
+        <div class="proj-desc">面向公安机关的智能态势感知系统，整合多源数据实时分析、预警研判、可视化指挥调度能力，有效提升重大警情处置效率与预防能力。</div>
+        <div class="proj-metrics"><span class="metric">重大警情下降 30%</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-header"><div class="proj-icon">🏘️</div><span class="proj-badge">智慧社区</span></div>
+        <div class="proj-title">未来社区数字化平台</div>
+        <div class="proj-desc">面向新型城镇化的智慧社区综合服务平台，整合居住、出行、生活、治理等场景，构建数字孪生社区，入选住建部示范案例，成为全国可复制推广标杆。</div>
+        <div class="proj-metrics"><span class="metric">住建部示范案例</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-header"><div class="proj-icon">📱</div><span class="proj-badge">政务服务</span></div>
+        <div class="proj-title">龙游通政务 APP</div>
+        <div class="proj-desc">面向龙游县居民的一站式政务服务移动端平台，整合政务办事、民生服务、社区互动等功能，以高用户满意度跻身全省政务APP前三。</div>
+        <div class="proj-metrics"><span class="metric">全省 TOP 3</span><span class="metric">满意度 92.4分</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BLOG
+═══════════════════════════════════════════ -->
+<section id="blog">
+  <div class="section-inner">
+    <div class="fade-up" style="margin-bottom:2rem;">
+      <span class="section-tag">Knowledge & Insights</span>
+      <h2 class="section-title">知识感悟</h2>
+      <div class="divider"></div>
+      <p class="section-sub">产品思考、AI方法论、项目复盘与行业洞察，持续沉淀个人知识体系。</p>
+    </div>
+    <div class="blog-controls fade-up" id="blog-filters"></div>
+    <div class="blog-grid fade-up" id="blog-grid"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SKILLS
+═══════════════════════════════════════════ -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center;margin-bottom:3rem;">
+      <span class="section-tag">Skills</span>
+      <h2 class="section-title">技能标签</h2>
+      <div class="divider" style="margin:1rem auto 0;"></div>
+    </div>
+    <div class="skills-cloud fade-up">
+      <span class="skill-pill skill-l1">AI产品设计</span>
+      <span class="skill-pill skill-l1">大模型应用</span>
+      <span class="skill-pill skill-l1">Prompt Engineering</span>
+      <span class="skill-pill skill-l1">RAG架构</span>
+      <span class="skill-pill skill-l1">多模态AI</span>
+      <span class="skill-pill skill-l2">智慧社区</span>
+      <span class="skill-pill skill-l2">物业数字化</span>
+      <span class="skill-pill skill-l2">政企解决方案</span>
+      <span class="skill-pill skill-l2">态势感知</span>
+      <span class="skill-pill skill-l2">政务服务</span>
+      <span class="skill-pill skill-l3">ToB产品</span>
+      <span class="skill-pill skill-l3">需求分析</span>
+      <span class="skill-pill skill-l3">用户研究</span>
+      <span class="skill-pill skill-l3">数据分析</span>
+      <span class="skill-pill skill-l3">产品规划</span>
+      <span class="skill-pill skill-l4">UI/UX设计</span>
+      <span class="skill-pill skill-l4">Axure</span>
+      <span class="skill-pill skill-l4">Figma</span>
+      <span class="skill-pill skill-l4">原型设计</span>
+      <span class="skill-pill skill-l4">设计系统</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════════ -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-grid fade-up">
+      <div>
+        <span class="section-tag">Contact</span>
+        <h2 class="section-title">联系我</h2>
+        <div class="divider"></div>
+        <p class="contact-note">
+          目前在杭州，期望薪资 20-25K，欢迎互联网/AI/政企数字化方向的机会。<br/><br/>
+          如果您正在寻找一位有深度AI产品经验、能快速落地的产品经理，欢迎随时联系。
+        </p>
+      </div>
+      <div>
+        <div class="contact-item" onclick="copyText('19045312613', this)">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-label">手机 / 微信</div>
+            <div class="contact-value">19045312613</div>
+            <div class="copy-hint">点击复制</div>
+          </div>
+        </div>
+        <div class="contact-item" onclick="copyText('380743091@qq.com', this)">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div class="contact-label">邮箱</div>
+            <div class="contact-value">380743091@qq.com</div>
+            <div class="copy-hint">点击复制</div>
+          </div>
+        </div>
+        <div class="contact-item" style="cursor:default;">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label">所在城市</div>
+            <div class="contact-value">浙江 · 杭州</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer>
+  <p>© 2024 张睿 · AI产品经理 · 杭州 &nbsp;|&nbsp; 用产品思维驱动AI落地</p>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     MODAL
+═══════════════════════════════════════════ -->
+<div id="modal-overlay" onclick="closeModal(event)">
+  <div id="modal-box">
+    <button id="modal-close" onclick="closeModalBtn()">✕</button>
+    <div id="modal-cat"></div>
+    <h2 id="modal-title"></h2>
+    <div id="modal-info"></div>
+    <div id="modal-body"></div>
+    <div id="modal-tags"></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   博客文章数据 — 新增文章只需在此数组末尾复制一个对象即可
+   字段说明：
+     id       唯一标识（数字递增）
+     title    文章标题
+     date     发布日期 "YYYY-MM-DD"
+     category 分类（用于筛选按钮）
+     tags     标签数组
+     excerpt  摘要（列表页显示）
+     content  正文（支持简单HTML：<h2> <h3> <p> <ul> <li> <strong> <blockquote>）
+═══════════════════════════════════════════════════════════ */
+const ARTICLES = [
+  {
+    id: 1,
+    title: "AI产品经理的核心竞争力：从需求到落地的全链路思考",
+    date: "2024-03-15",
+    category: "AI方法论",
+    tags: ["AI产品", "大模型", "产品思维"],
+    excerpt: "在大模型浪潮下，AI产品经理的核心价值不在于懂技术，而在于能将业务问题精准转化为AI可解决的命题，并推动它真正落地创造价值。",
+    content: `
+      <h2>AI产品经理的本质是什么？</h2>
+      <p>在过去一年里，我接触了大量声称自己是"AI产品经理"的候选人，但真正能把AI产品做出来的人并不多。问题出在哪里？</p>
+      <p>大多数人把AI产品经理理解为"懂AI技术的产品经理"，但这个理解是错的。<strong>AI产品经理的核心价值，是能将真实的业务问题精准转化为AI可解决的命题。</strong></p>
+      <h2>三个关键能力</h2>
+      <h3>1. 问题定义能力</h3>
+      <p>在绿城AI客服项目中，业务方最初的需求是"做一个智能客服"。但深入调研后我发现，真正的痛点不是"回答问题"，而是"工单分发效率低"——人工客服每天花40%的时间在判断工单该转给谁。</p>
+      <p>这个问题的重新定义，直接决定了产品方向：我们把重心放在意图识别+自动路由，而不是通用问答。最终意图识别准确率达到94%，工单闭环率78%。</p>
+      <h3>2. 数据感知能力</h3>
+      <p>AI产品的效果高度依赖数据质量。在观山海选品项目中，我们最初的模型效果很差，不是因为模型不好，而是训练数据的标注标准不统一。</p>
+      <blockquote>好的AI产品经理，要能在数据、模型、产品三个层面同时发现问题。</blockquote>
+      <h3>3. 落地推动能力</h3>
+      <p>AI产品最难的不是技术，是推动业务方接受AI的决策结果。这需要产品经理具备极强的沟通能力和数据说服能力。</p>
+      <h2>结语</h2>
+      <p>AI产品经理是一个需要持续学习的岗位。技术在变，但对业务的深度理解和对用户的同理心，永远是核心。</p>
+    `
+  },
+  {
+    id: 2,
+    title: "物业数字化的本质：从收费系统到服务生态的跃迁",
+    date: "2024-02-20",
+    category: "项目复盘",
+    tags: ["物业科技", "数字化", "ToB产品"],
+    excerpt: "中铁建物业收费系统覆盖10城300+项目、400万业主，年流水120亿。这个项目让我深刻理解了ToB产品的本质：不是做功能，而是重构业务流程。",
+    content: `
+      <h2>为什么物业数字化这么难？</h2>
+      <p>物业行业有一个特殊性：它是一个高度分散、强地域性、重人工的行业。每个项目都有自己的收费标准、业主习惯、管理模式。</p>
+      <p>当我们要把一套系统推广到10个城市、300多个项目时，面临的不是技术问题，而是<strong>标准化与本地化的矛盾</strong>。</p>
+      <h2>我们是怎么解决的</h2>
+      <h3>分层架构设计</h3>
+      <p>我们把系统分为三层：</p>
+      <ul>
+        <li><strong>平台层</strong>：统一的账务引擎、支付通道、数据中台</li>
+        <li><strong>配置层</strong>：每个项目可自定义收费项目、计费规则、催缴策略</li>
+        <li><strong>运营层</strong>：各项目独立运营，数据汇总到集团</li>
+      </ul>
+      <p>这个架构让我们在保持灵活性的同时，实现了96%的系统渗透率。</p>
+      <h3>推广策略</h3>
+      <p>ToB产品的推广，最重要的是找到"关键人"。在物业行业，关键人不是IT部门，而是财务总监和项目经理。我们专门为他们设计了数据看板和报表功能，让他们第一时间看到系统带来的价值。</p>
+      <h2>最大的收获</h2>
+      <p>这个项目让我理解了一件事：<strong>ToB产品的成功，70%取决于推广策略，30%取决于产品本身。</strong>再好的产品，如果推广不到位，也是白搭。</p>
+    `
+  },
+  {
+    id: 3,
+    title: "大模型时代的产品思考：什么样的场景真正适合AI？",
+    date: "2024-01-10",
+    category: "AI方法论",
+    tags: ["大模型", "产品策略", "AI落地"],
+    excerpt: "不是所有问题都需要大模型来解决。在AI热潮中保持清醒，找到真正适合AI的场景，是AI产品经理最重要的判断力。",
+    content: `
+      <h2>AI不是万能的</h2>
+      <p>在过去一年，我见过太多"为了AI而AI"的产品。把一个简单的规则引擎换成大模型，结果效果更差、成本更高、可解释性更低。</p>
+      <p>大模型真正擅长的是什么？<strong>处理非结构化信息、理解自然语言意图、生成创意内容。</strong></p>
+      <h2>适合大模型的场景特征</h2>
+      <ul>
+        <li>输入是自然语言或非结构化数据</li>
+        <li>输出需要一定的创意或推理</li>
+        <li>规则复杂到难以穷举</li>
+        <li>对准确率要求不是100%（允许一定错误率）</li>
+        <li>有足够的数据用于微调或RAG</li>
+      </ul>
+      <h2>不适合大模型的场景</h2>
+      <ul>
+        <li>精确计算（用规则引擎）</li>
+        <li>实时性要求极高（延迟敏感）</li>
+        <li>数据极度敏感（安全合规风险）</li>
+        <li>结果需要100%可解释</li>
+      </ul>
+      <h2>我的判断框架</h2>
+      <p>在评估一个场景是否适合AI时，我会问三个问题：</p>
+      <ol>
+        <li>这个问题，人类是怎么解决的？AI能模拟这个过程吗？</li>
+        <li>如果AI出错，后果是什么？可以接受吗？</li>
+        <li>有没有更简单的非AI方案？如果有，为什么要用AI？</li>
+      </ol>
+      <blockquote>最好的AI产品，是让用户感觉不到AI的存在，只感觉到问题被解决了。</blockquote>
+    `
+  },
+  {
+    id: 4,
+    title: "政务数字化的产品逻辑：龙游通的设计思考",
+    date: "2023-11-05",
+    category: "项目复盘",
+    tags: ["政务服务", "用户体验", "产品设计"],
+    excerpt: "政务APP的用户体验设计，和消费互联网完全不同。用户不是来找乐子的，他们是来办事的。如何让办事变得简单，是政务产品的核心命题。",
+    content: `
+      <h2>政务产品的特殊性</h2>
+      <p>做龙游通之前，我做了大量用户调研。政务APP的用户有几个显著特征：</p>
+      <ul>
+        <li>使用频率低（一年可能就用几次）</li>
+        <li>使用场景明确（来了就是要办某件事）</li>
+        <li>容错率低（办错了可能有实际损失）</li>
+        <li>用户年龄跨度大（从20岁到70岁都有）</li>
+      </ul>
+      <h2>我们的设计原则</h2>
+      <h3>零学习成本</h3>
+      <p>用户不会花时间学习一个一年用几次的APP。所有功能必须做到"看到就会用"。我们把最常用的10个服务放在首页，用大图标+文字标注，老年人也能看清楚。</p>
+      <h3>流程最短化</h3>
+      <p>每个办事流程，我们都要求不超过3步。如果超过3步，就要重新设计流程，而不是让用户多点几下。</p>
+      <h3>状态透明化</h3>
+      <p>政务办事最让用户焦虑的是"不知道进展到哪了"。我们为每个事项设计了清晰的进度追踪，让用户随时知道自己的申请在哪个环节。</p>
+      <h2>结果</h2>
+      <p>龙游通最终获得全省政务APP TOP3，用户满意度92.4分。这个成绩背后，是无数次的用户测试和迭代。</p>
+    `
+  },
+  {
+    id: 5,
+    title: "从态势感知到智慧城市：AI在公共安全领域的思考",
+    date: "2023-09-18",
+    category: "行业洞察",
+    tags: ["态势感知", "公共安全", "AI应用"],
+    excerpt: "公安态势感知项目让我深刻理解了AI在高风险领域的应用边界：AI可以辅助决策，但不能替代决策。人的判断永远是最后一道防线。",
+    content: `
+      <h2>公共安全领域的AI应用特殊性</h2>
+      <p>在做公安态势感知项目时，我面临的最大挑战不是技术，而是<strong>如何在AI辅助和人工决策之间找到正确的边界</strong>。</p>
+      <p>公共安全领域有一个铁律：AI可以提高效率，但不能承担责任。所有的最终决策，必须由人来做。</p>
+      <h2>我们的设计思路</h2>
+      <h3>AI做什么</h3>
+      <ul>
+        <li>海量数据的实时处理和异常检测</li>
+        <li>多源信息的关联分析和可视化</li>
+        <li>历史数据的模式识别和预警</li>
+        <li>优先级排序，帮助警员聚焦重要事项</li>
+      </ul>
+      <h3>人做什么</h3>
+      <ul>
+        <li>最终的研判和决策</li>
+        <li>复杂情境的综合判断</li>
+        <li>对AI误报的纠正和反馈</li>
+      </ul>
+      <h2>重大警情下降30%的背后</h2>
+      <p>这个数据的背后，是系统帮助警员从"被动响应"转变为"主动预防"。通过对历史数据的分析，系统能提前识别高风险时段和区域，让警力提前部署。</p>
+      <blockquote>最好的安全系统，是让危险在发生之前就被消除。</blockquote>
+    `
+  },
+  {
+    id: 6,
+    title: "写给自己：12年产品路的几点感悟",
+    date: "2023-08-01",
+    category: "个人感悟",
+    tags: ["职业发展", "产品思维", "成长"],
+    excerpt: "12年，从UI设计师到AI产品经理，经历了移动互联网的爆发、政务数字化的浪潮、AI大模型的崛起。回头看，有几件事是真正重要的。",
+    content: `
+      <h2>第一件事：深度比广度更重要</h2>
+      <p>我见过很多产品经理，什么都懂一点，但什么都不精。在AI时代，这种"万金油"型的产品经理越来越难找到自己的位置。</p>
+      <p>我的建议是：选一个你真正感兴趣的领域，深耕下去。我选择了ToB和AI，这两个方向让我在过去几年里积累了真正的竞争壁垒。</p>
+      <h2>第二件事：数据是产品经理的语言</h2>
+      <p>在中铁建物业项目中，我第一次真正理解了数据的力量。当我拿着"渗透率从60%提升到96%"这个数字去和业务方沟通时，所有的争论都消失了。</p>
+      <p><strong>数据不会说谎，但数据会被误读。</strong>学会正确地解读和使用数据，是产品经理最重要的能力之一。</p>
+      <h2>第三件事：用户同理心永远不过时</h2>
+      <p>无论AI技术多么先进，产品的本质还是解决人的问题。在做龙游通的时候，我们专门去找了一批60岁以上的老人做测试，发现了很多我们年轻人根本想不到的问题。</p>
+      <p>这些问题，任何AI都发现不了，只有真正坐下来和用户聊，才能发现。</p>
+      <h2>第四件事：保持好奇心</h2>
+      <p>12年里，我经历了移动互联网、政务数字化、AI大模型三个大的技术浪潮。每一次浪潮，都有人被淘汰，也有人抓住机会。</p>
+      <p>区别在于：保持好奇心，持续学习，不要让自己的认知停留在过去。</p>
+      <blockquote>产品经理的核心竞争力，不是你现在知道什么，而是你学习新事物的速度。</blockquote>
+    `
+  }
+];
+
+/* ═══════════════════════════════════════════════════════════
+   博客渲染逻辑
+═══════════════════════════════════════════════════════════ */
+let currentFilter = '全部';
+
+function getAllCategories() {
+  const cats = ['全部', ...new Set(ARTICLES.map(a => a.category))];
+  return cats;
+}
+
+function renderFilters() {
+  const el = document.getElementById('blog-filters');
+  el.innerHTML = getAllCategories().map(cat =>
+    `<button class="filter-btn ${cat === currentFilter ? 'active' : ''}"
+      onclick="setFilter('${cat}')">${cat}</button>`
+  ).join('');
+}
+
+function setFilter(cat) {
+  currentFilter = cat;
+  renderFilters();
+  renderBlog();
+}
+
+function renderBlog() {
+  const filtered = currentFilter === '全部'
+    ? ARTICLES
+    : ARTICLES.filter(a => a.category === currentFilter);
+  const el = document.getElementById('blog-grid');
+  el.innerHTML = filtered.map(a => `
+    <div class="blog-card" onclick="openArticle(${a.id})">
+      <div class="blog-meta">
+        <span class="blog-cat">${a.category}</span>
+        <span class="blog-date">${a.date}</span>
+      </div>
+      <div class="blog-title">${a.title}</div>
+      <div class="blog-excerpt">${a.excerpt}</div>
+      <div class="blog-tags">${a.tags.map(t => `<span class="blog-tag">${t}</span>`).join('')}</div>
+      <div class="blog-read">阅读全文 →</div>
+    </div>
+  `).join('');
+}
+
+function openArticle(id) {
+  const a = ARTICLES.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById('modal-cat').textContent = a.category;
+  document.getElementById('modal-title').textContent = a.title;
+  document.getElementById('modal-info').textContent = `${a.date}  ·  ${a.tags.join(' / ')}`;
+  document.getElementById('modal-body').innerHTML = a.content;
+  document.getElementById('modal-tags').innerHTML = a.tags.map(t =>
+    `<span class="blog-tag">${t}</span>`).join('');
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModalBtn();
+}
+function closeModalBtn() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Nav scroll effect
+═══════════════════════════════════════════════════════════ */
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ═══════════════════════════════════════════════════════════
+   Mobile menu
+═══════════════════════════════════════════════════════════ */
+function toggleMenu() {
+  const m = document.getElementById('mobile-menu');
+  m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+}
+function closeMenu() {
+  document.getElementById('mobile-menu').style.display = 'none';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Copy to clipboard
+═══════════════════════════════════════════════════════════ */
+function copyText(text, el) {
+  navigator.clipboard.writeText(text).then(() => {
+    const hint = el.querySelector('.copy-hint');
+    if (hint) { hint.textContent = '已复制！'; setTimeout(() => hint.textContent = '点击复制', 1500); }
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Scroll fade-in animation
+═══════════════════════════════════════════════════════════ */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+/* ═══════════════════════════════════════════════════════════
+   Init
+═══════════════════════════════════════════════════════════ */
+renderFilters();
+renderBlog();
+</script>
+</body>
+</html>
